@@ -46,7 +46,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="navbar__right">
 
-          {/* Theme toggle button */}
+          {/* Theme toggle */}
           <button
             className="navbar__theme-btn"
             onClick={toggleTheme}
@@ -69,7 +69,7 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile hamburger */}
+          {/* Hamburger */}
           <button
             className="navbar__hamburger"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -80,7 +80,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="navbar__mobile" onClick={() => setMenuOpen(false)}>
           <Link to="/">Home</Link>
@@ -91,14 +91,16 @@ export default function Navbar() {
               <Link to="/favorites">Favorites</Link>
               <Link to="/watchlist">Watchlist</Link>
               <Link to="/history">History</Link>
-              <Link to="/mood">🎭 Mood Pick</Link>
+              <Link to="/mood">🎭 Mood</Link>
             </>
           )}
           {isAdmin && <Link to="/admin">Admin Panel</Link>}
+
           <div className="navbar__mobile-theme" onClick={(e) => e.stopPropagation()}>
             <span>{isDark ? "Dark Mode" : "Light Mode"}</span>
             <button onClick={toggleTheme}>{isDark ? "☀️ Light" : "🌙 Dark"}</button>
           </div>
+
           {user
             ? <button className="mobile-logout" onClick={handleLogout}>Logout</button>
             : <Link to="/login">Login</Link>

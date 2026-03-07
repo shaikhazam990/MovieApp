@@ -1,0 +1,30 @@
+.genre-filter {
+  display:   flex;
+  flex-wrap: wrap;
+  gap:       8px;
+  padding:   4px 0 20px;
+
+  &__btn {
+    background:    var(--bg3);
+    border:        1px solid var(--border);
+    color:         var(--text-muted);
+    padding:       7px 16px;
+    border-radius: 20px;
+    font-size:     0.85rem;
+    font-weight:   500;
+    transition:    all 0.2s;
+    white-space:   nowrap;
+
+    &:hover {
+      border-color: var(--accent);
+      color:        var(--text);
+    }
+
+    &.active {
+      background:   var(--accent);
+      border-color: var(--accent);
+      color:        #fff;
+      font-weight:  600;
+    }
+  }
+}

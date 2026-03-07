@@ -1,75 +1,121 @@
-import { Link } from "react-router-dom";
-import { getImageUrl } from "../services/tmdb.api";
-import { useFavorites } from "../../favorites/hooks/useFavorites";
+import { Link }          from "react-router-dom";
+import { useDispatch }    from "react-redux";
+import { addFavorite, removeFavorite } from "../../favorites/favoritesSlice";
+import { useFavorites }   from "../../favorites/hooks/useFavorites";
+import { useWatchlist }   from "../../watchlist/hooks/useWatchlist";
+import { getImageUrl }    from "../services/tmdb.api";
 import "./MovieCard.scss";
 
-// Placeholder jab poster na ho
 const PLACEHOLDER = "https://via.placeholder.com/300x450/1a1a1a/555?text=No+Poster";
 
 export default function MovieCard({ movie, mediaType = "movie" }) {
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const dispatch = useDispatch();
 
-  if (!movie) return null;
+  const { isFavorite }    = useFavorites();
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
 
-  // TMDB movies mein title, TV mein name hota hai
-  const title       = movie.title || movie.name || "Unknown";
+  // movie ya tv show dono handle karo
+  const title       = movie.title       || movie.name        || "Unknown";
   const releaseDate = movie.release_date || movie.first_air_date || "";
   const year        = releaseDate ? releaseDate.slice(0, 4) : "N/A";
-  const rating      = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-  const posterUrl   = getImageUrl(movie.poster_path) || PLACEHOLDER;
-  const type        = movie.media_type || mediaType; // "movie" ya "tv"
-  const linkPath    = `/${type === "tv" ? "tv" : "movie"}/${movie.id}`;
+  const rating      = movie.vote_average || 0;
+  const poster      = movie.poster_path  ? getImageUrl(movie.poster_path) : PLACEHOLDER;
+  const type        = movie.media_type   || mediaType;
+  const linkTo      = `/${type === "tv" ? "tv" : "movie"}/${movie.id}`;
 
-  // Favorite toggle ke liye movie data
-  const movieData = {
-    tmdbId:      String(movie.id),
-    mediaType:   type,
-    title,
-    posterPath:  movie.poster_path || "",
-    releaseDate,
-    overview:    movie.overview    || "",
-    rating:      movie.vote_average || 0,
-  };
-
+  // Favorite toggle
   function handleFavoriteClick(e) {
-    e.preventDefault(); // Link navigate mat karo
-    toggleFavorite(movieData);
+    e.preventDefault();
+    e.stopPropagation();
+
+    const movieData = {
+      tmdbId:      String(movie.id),
+      mediaType:   type === "tv" ? "tv" : "movie",
+      title,
+      posterPath:  movie.poster_path  || "",
+      releaseDate: releaseDate        || "",
+      overview:    movie.overview     || "",
+      rating:      rating,
+    };
+
+    if (isFavorite(movie.id)) {
+      dispatch(removeFavorite(String(movie.id)));
+    } else {
+      dispatch(addFavorite(movieData));
+    }
   }
 
+  // Watchlist toggle
+  function handleWatchlistClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const movieData = {
+      tmdbId:      String(movie.id),
+      mediaType:   type === "tv" ? "tv" : "movie",
+      title,
+      posterPath:  movie.poster_path  || "",
+      releaseDate: releaseDate        || "",
+      overview:    movie.overview     || "",
+      rating:      rating,
+    };
+
+    toggleWatchlist(movieData);
+  }
+
+  const favorited   = isFavorite(movie.id);
+  const inWatchlist = isInWatchlist(movie.id);
+
   return (
-    <Link to={linkPath} className="movie-card">
+    <Link to={linkTo} className="movie-card">
 
       {/* Poster */}
       <div className="movie-card__poster">
         <img
-          src={posterUrl}
+          src={poster}
           alt={title}
-          onError={(e) => { e.target.src = PLACEHOLDER; }} // broken image fallback
           loading="lazy"
+          onError={(e) => { e.target.src = PLACEHOLDER; }}
         />
 
-        {/* Hover overlay */}
-        <div className="movie-card__overlay">
-          <span className="movie-card__play">▶ View Details</span>
+        {/* Rating badge */}
+        {rating > 0 && (
+          <div className="movie-card__rating">
+            ⭐ {rating.toFixed(1)}
+          </div>
+        )}
+
+        {/* Action buttons — hover pe dikhte hain */}
+        <div className="movie-card__actions">
+          {/* Favorite */}
+          <button
+            className={`movie-card__action-btn ${favorited ? "active-fav" : ""}`}
+            onClick={handleFavoriteClick}
+            title={favorited ? "Remove from Favorites" : "Add to Favorites"}
+          >
+            {favorited ? "❤️" : "🤍"}
+          </button>
+
+          {/* Watchlist */}
+          <button
+            className={`movie-card__action-btn ${inWatchlist ? "active-wl" : ""}`}
+            onClick={handleWatchlistClick}
+            title={inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+          >
+            {inWatchlist ? "🔖" : "🕐"}
+          </button>
         </div>
 
-        {/* Favorite button */}
-        <button
-          className={`movie-card__fav ${isFavorite(movie.id) ? "active" : ""}`}
-          onClick={handleFavoriteClick}
-          title={isFavorite(movie.id) ? "Remove from favorites" : "Add to favorites"}
-        >
-          {isFavorite(movie.id) ? "❤️" : "🤍"}
-        </button>
-
-        {/* Rating badge */}
-        <div className="movie-card__rating">⭐ {rating}</div>
       </div>
 
       {/* Info */}
       <div className="movie-card__info">
-        <h3 className="movie-card__title">{title}</h3>
-        <span className="movie-card__year">{year}</span>
+        <p className="movie-card__title">{title}</p>
+        <div className="movie-card__meta">
+          <span>{year}</span>
+          <span>•</span>
+          <span>{type === "tv" ? "TV" : "Movie"}</span>
+        </div>
       </div>
 
     </Link>
