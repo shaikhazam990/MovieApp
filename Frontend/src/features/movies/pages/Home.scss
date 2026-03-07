@@ -1,0 +1,123 @@
+.home {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+// ── Hero Banner ───────────────────────────
+.hero {
+  position:            relative;
+  height:              600px;
+  background-size:     cover;
+  background-position: center top;
+
+  @media (max-width: 768px) { height: 420px; }
+
+  &__overlay {
+    position:   absolute;
+    inset:      0;
+    background: linear-gradient(
+      to right,
+      rgba(0,0,0,0.85) 0%,
+      rgba(0,0,0,0.4)  60%,
+      transparent      100%
+    ),
+    linear-gradient(
+      to top,
+      rgba(13,13,13,1) 0%,
+      transparent      40%
+    );
+  }
+
+  &__content {
+    position:    absolute;
+    bottom:      80px;
+    left:        60px;
+    max-width:   560px;
+    z-index:     1;
+
+    @media (max-width: 768px) {
+      left:   20px;
+      bottom: 40px;
+    }
+  }
+
+  &__title {
+    font-size:     3rem;
+    font-weight:   800;
+    line-height:   1.1;
+    margin-bottom: 16px;
+    color:         #fff;
+
+    @media (max-width: 768px) { font-size: 2rem; }
+  }
+
+  &__overview {
+    color:         rgba(255,255,255,0.75);
+    font-size:     1rem;
+    line-height:   1.6;
+    margin-bottom: 24px;
+
+    @media (max-width: 480px) { display: none; }
+  }
+
+  &__actions {
+    display: flex;
+    gap:     12px;
+  }
+
+  &__btn {
+    padding:       12px 28px;
+    border-radius: 8px;
+    font-size:     1rem;
+    font-weight:   600;
+    border:        none;
+    transition:    all 0.2s;
+
+    &--primary {
+      background: var(--accent);
+      color:      #fff;
+      &:hover { opacity: 0.85; transform: translateY(-1px); }
+    }
+
+    &--secondary {
+      background: rgba(255,255,255,0.15);
+      color:      #fff;
+      backdrop-filter: blur(4px);
+      &:hover { background: rgba(255,255,255,0.25); }
+    }
+  }
+}
+
+// ── Sections ─────────────────────────────
+.home__sections {
+  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+
+  @media (max-width: 768px) { padding: 24px 16px; }
+}
+
+.movie-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title {
+  font-size:   1.4rem;
+  font-weight: 700;
+  color:       var(--text);
+}
+
+// ── Movies Grid ───────────────────────────
+.movies-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap:                   20px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+}

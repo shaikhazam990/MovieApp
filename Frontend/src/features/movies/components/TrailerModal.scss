@@ -1,0 +1,78 @@
+.trailer-modal {
+  position:        fixed;
+  inset:           0;
+  background:      rgba(0,0,0,0.88);
+  z-index:         999;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         20px;
+  animation:       fadeIn 0.2s ease;
+
+  &__box {
+    position:      relative;
+    width:         100%;
+    max-width:     900px;
+    background:    var(--bg2);
+    border-radius: 16px;
+    overflow:      hidden;
+  }
+
+  &__close {
+    position:      absolute;
+    top:           12px;
+    right:         12px;
+    z-index:       10;
+    background:    rgba(0,0,0,0.6);
+    border:        none;
+    color:         #fff;
+    width:         36px;
+    height:        36px;
+    border-radius: 50%;
+    font-size:     1rem;
+    display:       flex;
+    align-items:   center;
+    justify-content: center;
+    transition:    background 0.2s;
+
+    &:hover { background: var(--accent); }
+  }
+
+  &__video {
+    position:    relative;
+    padding-top: 56.25%; // 16:9 ratio
+
+    iframe {
+      position: absolute;
+      inset:    0;
+      width:    100%;
+      height:   100%;
+      border:   none;
+    }
+  }
+
+  // Trailer unavailable state
+  &__unavailable {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    justify-content: center;
+    padding:         64px 32px;
+    gap:             16px;
+    text-align:      center;
+
+    span {
+      font-size: 3rem;
+    }
+
+    p {
+      color:     var(--text-muted);
+      font-size: 1rem;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

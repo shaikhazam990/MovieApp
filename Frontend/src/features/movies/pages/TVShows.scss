@@ -1,0 +1,18 @@
+.tvshows {
+  min-height: 100vh;
+  background: var(--bg);
+
+  &__inner {
+    max-width: 1400px;
+    margin:    0 auto;
+    padding:   40px 48px;
+
+    @media (max-width: 768px) { padding: 24px 16px; }
+  }
+
+  &__heading {
+    font-size:     2rem;
+    font-weight:   700;
+    margin-bottom: 28px;
+  }
+}
