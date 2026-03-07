@@ -21,6 +21,9 @@ import MoodPicker from "./src/features/mood/pages/MoodPicker";
 
 import Settings from "./src/features/settings/pages/Settings";
 
+import HiddenGems    from "./src/features/hidden-gems/pages/HiddenGems";
+import MovieRoulette from "./src/features/roulette/pages/MovieRoulette";
+
 export const router = createBrowserRouter([
 
   // ── Public routes ─────────────────────────
@@ -66,5 +69,9 @@ export const router = createBrowserRouter([
     element: <AdminProtected><AdminDashboard /></AdminProtected>,
   },
   { path: "/settings", element: <Protected><Settings /></Protected> },
+
+
+  { path: "/hidden-gems", element: <Protected><HiddenGems /></Protected> },
+{ path: "/roulette",    element: <Protected><MovieRoulette /></Protected> },
 
 ]);

@@ -1,0 +1,244 @@
+.roulette-page {
+  min-height: 100vh;
+  background: var(--bg);
+
+  &__inner {
+    max-width: 1100px;
+    margin:    0 auto;
+    padding:   48px;
+    @media (max-width: 768px) { padding: 24px 16px; }
+  }
+
+  &__header {
+    text-align:    center;
+    margin-bottom: 48px;
+
+    h1 {
+      font-size:     2.8rem;
+      font-weight:   800;
+      color:         var(--text);
+      margin-bottom: 12px;
+      @media (max-width: 768px) { font-size: 2rem; }
+    }
+
+    p { color: var(--text-muted); font-size: 1.1rem; }
+  }
+}
+
+// ── Layout ────────────────────────────────
+.roulette-layout {
+  display:     grid;
+  grid-template-columns: 420px 1fr;
+  gap:         48px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
+// ── Wheel Side ────────────────────────────
+.roulette-wheel-side {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  gap:             20px;
+  position:        relative;
+}
+
+.roulette-pointer {
+  font-size:   2rem;
+  color:       var(--accent);
+  z-index:     2;
+  text-shadow: 0 2px 8px rgba(229,9,20,0.5);
+  margin-bottom: -8px;
+}
+
+.roulette-canvas {
+  border-radius: 50%;
+  box-shadow:    0 0 60px rgba(229,9,20,0.2),
+                 0 0 120px rgba(0,0,0,0.5);
+  max-width:     100%;
+}
+
+// ── Spin Button ───────────────────────────
+.roulette-spin-btn {
+  background:    var(--accent);
+  color:         #fff;
+  border:        none;
+  border-radius: 12px;
+  padding:       16px 40px;
+  font-size:     1.1rem;
+  font-weight:   700;
+  transition:    all 0.2s;
+  width:         100%;
+  max-width:     280px;
+
+  &:hover:not(:disabled) {
+    opacity:    0.85;
+    transform:  translateY(-2px);
+    box-shadow: 0 8px 24px rgba(229,9,20,0.35);
+  }
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  &.spinning {
+    background: #333;
+    animation:  pulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+// ── Result Side ───────────────────────────
+.roulette-result-side {
+  display:         flex;
+  flex-direction:  column;
+  justify-content: center;
+  min-height:      400px;
+
+  @media (max-width: 900px) { width: 100%; }
+}
+
+.roulette-placeholder {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  gap:             16px;
+  text-align:      center;
+  padding:         40px;
+
+  span { font-size: 4rem; }
+
+  p { color: var(--text); font-size: 1.1rem; font-weight: 600; }
+  .sub { color: var(--text-muted); font-size: 0.9rem; font-weight: 400; }
+}
+
+.roulette-spinner-emoji {
+  font-size:  4rem !important;
+  animation:  spin 1s linear infinite;
+  display:    inline-block;
+}
+
+// ── Result ────────────────────────────────
+.roulette-result {
+  display:        flex;
+  flex-direction: column;
+  gap:            20px;
+  width:          100%;
+
+  &__genre {
+    padding:       12px 24px;
+    border-radius: 12px;
+    color:         #fff;
+    font-size:     1.2rem;
+    font-weight:   700;
+    text-align:    center;
+  }
+
+  &__loading {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    gap:             16px;
+    padding:         40px;
+
+    p { color: var(--text-muted); }
+  }
+}
+
+// ── Movie Card ────────────────────────────
+.roulette-movie-card {
+  display:       flex;
+  gap:           20px;
+  background:    var(--bg2);
+  border:        1px solid var(--border);
+  border-radius: 16px;
+  overflow:      hidden;
+  animation:     fadeIn 0.4s ease;
+
+  img {
+    width:       140px;
+    flex-shrink: 0;
+    object-fit:  cover;
+  }
+
+  &__info {
+    padding:        20px 20px 20px 0;
+    display:        flex;
+    flex-direction: column;
+    gap:            12px;
+
+    h2 {
+      font-size:   1.3rem;
+      font-weight: 700;
+      color:       var(--text);
+      line-height: 1.3;
+    }
+  }
+
+  &__meta {
+    display:     flex;
+    align-items: center;
+    gap:         8px;
+    color:       var(--text-muted);
+    font-size:   0.88rem;
+  }
+
+  &__overview {
+    color:       var(--text-muted);
+    font-size:   0.88rem;
+    line-height: 1.6;
+    flex:        1;
+  }
+
+  &__actions {
+    display:  flex;
+    gap:      10px;
+    flex-wrap: wrap;
+  }
+}
+
+.roulette-watch-btn {
+  background:    var(--accent);
+  color:         #fff;
+  border:        none;
+  border-radius: 8px;
+  padding:       10px 20px;
+  font-size:     0.9rem;
+  font-weight:   600;
+  transition:    all 0.2s;
+  &:hover { opacity: 0.85; }
+}
+
+.roulette-again-btn {
+  background:    var(--bg3);
+  color:         var(--text);
+  border:        1px solid var(--border);
+  border-radius: 8px;
+  padding:       10px 20px;
+  font-size:     0.9rem;
+  font-weight:   600;
+  transition:    all 0.2s;
+  &:hover { border-color: var(--accent); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--bg3);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}

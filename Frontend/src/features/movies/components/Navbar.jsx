@@ -58,6 +58,8 @@ export default function Navbar() {
           {user ? (
             <div className="navbar__user">
               {/* <span className="navbar__username">👤 {user.username}</span> */}
+              <Link to="/hidden-gems">Hidden Gems</Link>
+              <Link to="/roulette">Roulette</Link>
               <button className="navbar__logout-btn" onClick={handleLogout}>
                 Logout
               </button>
