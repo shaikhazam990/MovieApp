@@ -1,19 +1,23 @@
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import Protected      from "./features/auth/components/Protected";
-import AdminProtected from "./features/auth/components/AdminProtected";
+import Protected      from "./src/features/auth/components/Protected";
+import AdminProtected from "./src/features/auth/components/AdminProtected";
 
-import Login          from "./features/auth/pages/Login";
-import Register       from "./features/auth/pages/Register";
+import Login          from "./src/features/auth/pages/Login";
+import Register       from "./src/features/auth/pages/Register";
 
-import Home           from "./features/movies/pages/Home";
-import MovieDetail    from "./features/movies/pages/MovieDetail";
-import SearchPage     from "./features/movies/pages/SearchPage";
-import TVShows        from "./features/movies/pages/TVShows";
+import Home           from "./src/features/movies/pages/Home";
+import MovieDetail    from "./src/features/movies/pages/MovieDetail";
+import SearchPage     from "./src/features/movies/pages/SearchPage";
+import TVShows        from "./src/features/movies/pages/TVShows";
 
-import Favorites      from "./features/favorites/pages/Favorites";
-import WatchHistory   from "./features/watchHistory/pages/WatchHistory";
-import AdminDashboard from "./features/admin/pages/AdminDashboard";
+import Favorites      from "./src/features/favorites/pages/Favorites";
+import WatchHistory   from "./src/features/watchHistory/pages/WatchHistory";
+import AdminDashboard from "./src/features/admin/pages/AdminDashboard";
+
+import Watchlist  from "./src/features/watchlist/pages/Watchlist";
+import MoodPicker from "./src/features/mood/pages/MoodPicker";
 
 export const router = createBrowserRouter([
 
@@ -22,6 +26,7 @@ export const router = createBrowserRouter([
   { path: "/register", element: <Register /> },
 
   // ── Protected routes — login zaroori ──────
+
   {
     path: "/",
     element: <Protected><Home /></Protected>,
@@ -50,6 +55,8 @@ export const router = createBrowserRouter([
     path: "/history",
     element: <Protected><WatchHistory /></Protected>,
   },
+  { path: "/watchlist", element: <Protected><Watchlist /></Protected> },
+  { path: "/mood",      element: <Protected><MoodPicker /></Protected> },
 
   // ── Admin only ────────────────────────────
   {

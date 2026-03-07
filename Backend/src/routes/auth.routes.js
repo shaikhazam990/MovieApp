@@ -8,7 +8,7 @@ const authRouter = express.Router()
 authRouter.post("/register",authController.registerController)
 authRouter.post("/login", authController.loginController)
 
-authRouter.get("/get-me", authMiddlewares.authUser,authController.getMeController)
+authRouter.get("/me", authMiddlewares.authUser, authController.getMeController)
 authRouter.get("/logout", authController.logoutController)
 
 module.exports=authRouter

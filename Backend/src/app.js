@@ -17,7 +17,9 @@ const movieRoutes    = require("./routes/movie.routes");
 const favoriteRoutes = require("./routes/favorite.routes");
 const historyRoutes  = require("./routes/watchHistory.routes");
 const adminRoutes    = require("./routes/admin.routes");
+const watchlistRoutes = require("./routes/watchlist.routes");
 
+app.use("/api/watchlist", watchlistRoutes);
 app.use("/api/auth",      authRoutes);
 app.use("/api/movies",    movieRoutes);
 app.use("/api/favorites", favoriteRoutes);
