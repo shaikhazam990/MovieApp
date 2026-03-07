@@ -1,0 +1,138 @@
+.navbar {
+  position:   sticky;
+  top:        0;
+  z-index:    100;
+  background: rgba(13,13,13,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+
+  &__inner {
+    max-width:   1400px;
+    margin:      0 auto;
+    padding:     0 24px;
+    height:      64px;
+    display:     flex;
+    align-items: center;
+    gap:         32px;
+  }
+
+  &__logo {
+    font-size:   1.4rem;
+    font-weight: 700;
+    color:       var(--text);
+    white-space: nowrap;
+
+    span { color: var(--accent); }
+  }
+
+  &__links {
+    display:     flex;
+    align-items: center;
+    gap:         24px;
+    flex:        1;
+
+    a {
+      color:       var(--text-muted);
+      font-size:   0.95rem;
+      font-weight: 500;
+      transition:  color 0.2s;
+
+      &:hover, &.active { color: var(--text); }
+    }
+
+    .admin-link { color: var(--accent) !important; }
+
+    @media (max-width: 768px) { display: none; }
+  }
+
+  &__right {
+    margin-left: auto;
+    display:     flex;
+    align-items: center;
+    gap:         12px;
+  }
+
+  &__user {
+    display:     flex;
+    align-items: center;
+    gap:         12px;
+  }
+
+  &__username {
+    color:     var(--text-muted);
+    font-size: 0.9rem;
+
+    @media (max-width: 480px) { display: none; }
+  }
+
+  &__logout {
+    background:    transparent;
+    border:        1px solid var(--border);
+    color:         var(--text-muted);
+    padding:       7px 14px;
+    border-radius: 6px;
+    font-size:     0.85rem;
+    transition:    all 0.2s;
+
+    &:hover {
+      border-color: var(--accent);
+      color:        var(--accent);
+    }
+  }
+
+  &__auth {
+    display: flex;
+    gap:     10px;
+
+    .btn-ghost {
+      color:      var(--text-muted);
+      padding:    7px 14px;
+      font-size:  0.9rem;
+      transition: color 0.2s;
+
+      &:hover { color: var(--text); }
+    }
+
+    .btn-solid {
+      background:    var(--accent);
+      color:         #fff;
+      padding:       7px 16px;
+      border-radius: 6px;
+      font-size:     0.9rem;
+      font-weight:   600;
+      transition:    opacity 0.2s;
+
+      &:hover { opacity: 0.85; }
+    }
+  }
+
+  &__hamburger {
+    display:    none;
+    background: transparent;
+    border:     none;
+    color:      var(--text);
+    font-size:  1.4rem;
+
+    @media (max-width: 768px) { display: block; }
+  }
+
+  // Mobile dropdown
+  &__mobile {
+    display:        flex;
+    flex-direction: column;
+    background:     var(--bg2);
+    border-top:     1px solid var(--border);
+    padding:        16px 24px;
+    gap:            16px;
+
+    a, button {
+      color:      var(--text-muted);
+      font-size:  1rem;
+      background: none;
+      border:     none;
+      text-align: left;
+
+      &:hover { color: var(--text); }
+    }
+  }
+}
