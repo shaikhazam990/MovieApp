@@ -1,41 +1,54 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
+
   username: {
-    type: String,
+    type:     String,
     required: true,
-    trim: true,
+    unique:   true,
+    trim:     true,
   },
+
   email: {
-    type: String,
+    type:     String,
     required: true,
-    unique: true,
+    unique:   true,
+    trim:     true,
     lowercase: true,
-    trim: true,
   },
+
   password: {
-    type: String,
+    type:     String,
     required: true,
+    select:   false,
   },
+
   isAdmin: {
-    type: Boolean,
+    type:    Boolean,
     default: false,
   },
+
   isBanned: {
-    type: Boolean,
+    type:    Boolean,
     default: false,
   },
+
+  // ── Settings fields ───────────────────
+  avatar: {
+    type:    String,
+    default: "", // image URL
+  },
+
+  language: {
+    type:    String,
+    default: "en",
+  },
+
+  region: {
+    type:    String,
+    default: "US",
+  },
+
 }, { timestamps: true });
-
-// ✅ Fixed — no next() in async hook
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 10);
-});
-
-userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 module.exports = mongoose.model("User", userSchema);

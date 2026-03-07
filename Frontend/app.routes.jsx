@@ -19,6 +19,8 @@ import AdminDashboard from "./src/features/admin/pages/AdminDashboard";
 import Watchlist  from "./src/features/watchlist/pages/Watchlist";
 import MoodPicker from "./src/features/mood/pages/MoodPicker";
 
+import Settings from "./src/features/settings/pages/Settings";
+
 export const router = createBrowserRouter([
 
   // ── Public routes ─────────────────────────
@@ -63,5 +65,6 @@ export const router = createBrowserRouter([
     path: "/admin",
     element: <AdminProtected><AdminDashboard /></AdminProtected>,
   },
+  { path: "/settings", element: <Protected><Settings /></Protected> },
 
 ]);
