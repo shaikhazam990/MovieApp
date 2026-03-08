@@ -41,10 +41,13 @@ async function registerController(req, res) {
       });
     }
 
+    // ✅ Yeh line add karo
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await userModel.create({
       username,
       email,
-      password,
+      password: hashedPassword,  // ✅ plain nahi, hashed save karo
     });
 
     const token = generateToken(user);
