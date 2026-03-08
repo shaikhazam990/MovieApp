@@ -2,23 +2,27 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL:         import.meta.env.VITE_BACKEND_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
 
 export function useWatchlist() {
   const [watchlist, setWatchlist] = useState([]);
-  const [loading,   setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => { fetchWatchlist(); }, []);
+  useEffect(() => {
+    fetchWatchlist();
+  }, []);
 
   async function fetchWatchlist() {
     setLoading(true);
     try {
       const res = await api.get("/api/watchlist");
       setWatchlist(res.data.watchlist || []);
-    } catch { }
-    finally { setLoading(false); }
+    } catch {
+    } finally {
+      setLoading(false);
+    }
   }
 
   function isInWatchlist(tmdbId) {
@@ -35,7 +39,11 @@ export function useWatchlist() {
 
   async function addToWatchlist(movieData) {
     try {
-      const res = await api.post("/api/watchlist", movieData);
+      const payload = {
+        ...movieData,
+        tmdbId: String(movieData.tmdbId), // string convert karo
+      };
+      const res = await api.post("/api/watchlist", payload);
       setWatchlist((prev) => [res.data.item, ...prev]);
     } catch (err) {
       console.error("Add watchlist failed:", err);

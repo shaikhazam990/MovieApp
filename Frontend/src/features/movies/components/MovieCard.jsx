@@ -1,33 +1,27 @@
-import { Link }          from "react-router-dom";
-import { useDispatch }    from "react-redux";
+import { Link }       from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { addFavorite, removeFavorite } from "../../favorites/favoritesSlice";
-import { useFavorites }   from "../../favorites/hooks/useFavorites";
-import { useWatchlist }   from "../../watchlist/hooks/useWatchlist";
-import { getImageUrl }    from "../services/tmdb.api";
+import { useFavorites } from "../../favorites/hooks/useFavorites";
+import { getImageUrl }  from "../services/tmdb.api";
 import "./MovieCard.scss";
 
 const PLACEHOLDER = "https://via.placeholder.com/300x450/1a1a1a/555?text=No+Poster";
 
-export default function MovieCard({ movie, mediaType = "movie" }) {
+export default function MovieCard({ movie, mediaType = "movie", isInWatchlist, toggleWatchlist }) {
   const dispatch = useDispatch();
+  const { isFavorite } = useFavorites();
 
-  const { isFavorite }    = useFavorites();
-  const { isInWatchlist, toggleWatchlist } = useWatchlist();
-
-  // movie ya tv show dono handle karo
-  const title       = movie.title       || movie.name        || "Unknown";
-  const releaseDate = movie.release_date || movie.first_air_date || "";
+  const title       = movie.title        || movie.name           || "Unknown";
+  const releaseDate = movie.release_date  || movie.first_air_date || "";
   const year        = releaseDate ? releaseDate.slice(0, 4) : "N/A";
-  const rating      = movie.vote_average || 0;
-  const poster      = movie.poster_path  ? getImageUrl(movie.poster_path) : PLACEHOLDER;
-  const type        = movie.media_type   || mediaType;
+  const rating      = movie.vote_average  || 0;
+  const poster      = movie.poster_path   ? getImageUrl(movie.poster_path) : PLACEHOLDER;
+  const type        = movie.media_type    || mediaType;
   const linkTo      = `/${type === "tv" ? "tv" : "movie"}/${movie.id}`;
 
-  // Favorite toggle
   function handleFavoriteClick(e) {
     e.preventDefault();
     e.stopPropagation();
-
     const movieData = {
       tmdbId:      String(movie.id),
       mediaType:   type === "tv" ? "tv" : "movie",
@@ -35,9 +29,8 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
       posterPath:  movie.poster_path  || "",
       releaseDate: releaseDate        || "",
       overview:    movie.overview     || "",
-      rating:      rating,
+      rating,
     };
-
     if (isFavorite(movie.id)) {
       dispatch(removeFavorite(String(movie.id)));
     } else {
@@ -45,11 +38,10 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
     }
   }
 
-  // Watchlist toggle
   function handleWatchlistClick(e) {
     e.preventDefault();
     e.stopPropagation();
-
+    if (!toggleWatchlist) return;
     const movieData = {
       tmdbId:      String(movie.id),
       mediaType:   type === "tv" ? "tv" : "movie",
@@ -57,19 +49,17 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
       posterPath:  movie.poster_path  || "",
       releaseDate: releaseDate        || "",
       overview:    movie.overview     || "",
-      rating:      rating,
+      rating,
     };
-
     toggleWatchlist(movieData);
   }
 
   const favorited   = isFavorite(movie.id);
-  const inWatchlist = isInWatchlist(movie.id);
+  const inWatchlist = isInWatchlist ? isInWatchlist(movie.id) : false;
 
   return (
     <Link to={linkTo} className="movie-card">
 
-      {/* Poster */}
       <div className="movie-card__poster">
         <img
           src={poster}
@@ -77,17 +67,10 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
           loading="lazy"
           onError={(e) => { e.target.src = PLACEHOLDER; }}
         />
-
-        {/* Rating badge */}
         {rating > 0 && (
-          <div className="movie-card__rating">
-            ⭐ {rating.toFixed(1)}
-          </div>
+          <div className="movie-card__rating">⭐ {rating.toFixed(1)}</div>
         )}
-
-        {/* Action buttons — hover pe dikhte hain */}
         <div className="movie-card__actions">
-          {/* Favorite */}
           <button
             className={`movie-card__action-btn ${favorited ? "active-fav" : ""}`}
             onClick={handleFavoriteClick}
@@ -95,8 +78,6 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
           >
             {favorited ? "❤️" : "🤍"}
           </button>
-
-          {/* Watchlist */}
           <button
             className={`movie-card__action-btn ${inWatchlist ? "active-wl" : ""}`}
             onClick={handleWatchlistClick}
@@ -105,10 +86,8 @@ export default function MovieCard({ movie, mediaType = "movie" }) {
             {inWatchlist ? "🔖" : "🕐"}
           </button>
         </div>
-
       </div>
 
-      {/* Info */}
       <div className="movie-card__info">
         <p className="movie-card__title">{title}</p>
         <div className="movie-card__meta">

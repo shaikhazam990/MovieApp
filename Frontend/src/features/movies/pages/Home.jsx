@@ -5,12 +5,12 @@ import MovieCard      from "../components/MovieCard";
 import TrailerModal   from "../components/TrailerModal";
 import InfiniteScroll from "../components/InfiniteScroll";
 import { useMovies }  from "../hooks/useMovies";
+import { useWatchlist } from "../../watchlist/hooks/useWatchlist";
 import { getImageUrl, getMovieVideos } from "../services/tmdb.api";
 import "./Home.scss";
 
 const PLACEHOLDER = "https://via.placeholder.com/1280x720/1a1a1a/555?text=No+Image";
 
-// Skeleton card — data load hone tak dikhao
 function SkeletonCard() {
   return (
     <div className="movie-card-skeleton">
@@ -30,22 +30,16 @@ export default function Home() {
     loading, loadMoreMovies, loadMoreTV,
   } = useMovies();
 
-  const [trailerKey,   setTrailerKey]   = useState(null);
-  const [showTrailer,  setShowTrailer]  = useState(false);
-  const [popularPage,  setPopularPage]  = useState(1);
-  const [tvPage,       setTvPage]       = useState(1);
+  // ✅ Sirf ek baar call karo
+  const { isInWatchlist, toggleWatchlist } = useWatchlist();
 
-  // Debug — console mein dekho kya aa raha hai
-  useEffect(() => {
-    console.log("trending:", trending);
-    console.log("loading:", loading);
-    console.log("TMDB KEY:", import.meta.env.VITE_TMDB_API_KEY);
-  }, [trending, loading]);
+  const [trailerKey,  setTrailerKey]  = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [popularPage, setPopularPage] = useState(1);
+  const [tvPage,      setTvPage]      = useState(1);
 
-  // Hero — trending ka pehla item
   const hero = trending[0] || null;
 
-  // Trailer fetch karo
   async function handleWatchTrailer(movieId) {
     try {
       const res     = await getMovieVideos(movieId);
@@ -74,7 +68,6 @@ export default function Home() {
     <div className="home">
       <Navbar />
 
-      {/* ── Hero Banner ─────────────────────── */}
       {hero ? (
         <div
           className="hero"
@@ -109,94 +102,84 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        // Hero loading skeleton
         <div className="hero hero--skeleton">
           <div className="skeleton" style={{ width: "100%", height: "100%" }} />
         </div>
       )}
 
-      {/* ── Sections ────────────────────────── */}
       <div className="home__sections">
 
-        {/* Trending */}
         <section className="movie-section">
           <h2 className="section-title">🔥 Trending Today</h2>
           <div className="movies-grid">
             {loading && trending.length === 0
               ? Array(10).fill(0).map((_, i) => <SkeletonCard key={i} />)
               : trending.slice(0, 10).map((m) => (
-                  <MovieCard key={m.id} movie={m} mediaType={m.media_type || "movie"} />
+                  <MovieCard key={m.id} movie={m} mediaType={m.media_type || "movie"}
+                    isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
                 ))
             }
           </div>
         </section>
 
-        {/* Now Playing */}
         <section className="movie-section">
           <h2 className="section-title">🎭 Now Playing</h2>
           <div className="movies-grid">
             {loading && nowPlaying.length === 0
               ? Array(10).fill(0).map((_, i) => <SkeletonCard key={i} />)
               : nowPlaying.slice(0, 10).map((m) => (
-                  <MovieCard key={m.id} movie={m} mediaType="movie" />
+                  <MovieCard key={m.id} movie={m} mediaType="movie"
+                    isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
                 ))
             }
           </div>
         </section>
 
-        {/* Top Rated */}
         <section className="movie-section">
           <h2 className="section-title">⭐ Top Rated</h2>
           <div className="movies-grid">
             {loading && topRated.length === 0
               ? Array(10).fill(0).map((_, i) => <SkeletonCard key={i} />)
               : topRated.slice(0, 10).map((m) => (
-                  <MovieCard key={m.id} movie={m} mediaType="movie" />
+                  <MovieCard key={m.id} movie={m} mediaType="movie"
+                    isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
                 ))
             }
           </div>
         </section>
 
-        {/* Upcoming */}
         <section className="movie-section">
           <h2 className="section-title">📅 Upcoming</h2>
           <div className="movies-grid">
             {loading && upcoming.length === 0
               ? Array(10).fill(0).map((_, i) => <SkeletonCard key={i} />)
               : upcoming.slice(0, 10).map((m) => (
-                  <MovieCard key={m.id} movie={m} mediaType="movie" />
+                  <MovieCard key={m.id} movie={m} mediaType="movie"
+                    isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
                 ))
             }
           </div>
         </section>
 
-        {/* Popular Movies — Infinite Scroll */}
         <section className="movie-section">
           <h2 className="section-title">🎬 Popular Movies</h2>
-          <InfiniteScroll
-            onLoadMore={handleLoadMoreMovies}
-            hasMore={true}
-            loading={loading}
-          >
+          <InfiniteScroll onLoadMore={handleLoadMoreMovies} hasMore={true} loading={loading}>
             <div className="movies-grid">
               {popular.map((m) => (
-                <MovieCard key={m.id} movie={m} mediaType="movie" />
+                <MovieCard key={m.id} movie={m} mediaType="movie"
+                  isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
               ))}
             </div>
           </InfiniteScroll>
         </section>
 
-        {/* Popular TV — Infinite Scroll */}
         <section className="movie-section">
           <h2 className="section-title">📺 Popular TV Shows</h2>
-          <InfiniteScroll
-            onLoadMore={handleLoadMoreTV}
-            hasMore={true}
-            loading={loading}
-          >
+          <InfiniteScroll onLoadMore={handleLoadMoreTV} hasMore={true} loading={loading}>
             <div className="movies-grid">
               {popularTV.map((m) => (
-                <MovieCard key={m.id} movie={m} mediaType="tv" />
+                <MovieCard key={m.id} movie={m} mediaType="tv"
+                  isInWatchlist={isInWatchlist} toggleWatchlist={toggleWatchlist} />
               ))}
             </div>
           </InfiniteScroll>
@@ -204,12 +187,8 @@ export default function Home() {
 
       </div>
 
-      {/* Trailer Modal */}
       {showTrailer && (
-        <TrailerModal
-          trailerKey={trailerKey}
-          onClose={() => setShowTrailer(false)}
-        />
+        <TrailerModal trailerKey={trailerKey} onClose={() => setShowTrailer(false)} />
       )}
     </div>
   );
