@@ -1,4 +1,4 @@
-const WatchHistory = require("../model/watchHistory.model");
+const WatchHistory = require("../model/watchhistory.model");
 
 // ─────────────────────────────────────────
 // GET watch history — /api/history
