@@ -146,9 +146,43 @@ async function logoutController(req, res) {
   }
 }
 
+async function guestLoginController(req, res) {
+  try {
+    let guest = await userModel.findOne({ email: "guest@movieverse.com" });
+
+    // Agar guest account nahi hai toh banao
+    if (!guest) {
+      const hashedPassword = await bcrypt.hash("guest123456", 10);
+      guest = await userModel.create({
+        username: "Guest User",
+        email:    "guest@movieverse.com",
+        password: hashedPassword,
+      });
+    }
+
+    const token = generateToken(guest);
+    res.cookie("token", token, cookieOptions());
+
+    return res.status(200).json({
+      message: "Guest login successful",
+      user: {
+        id:       guest._id,
+        username: guest.username,
+        email:    guest.email,
+        isAdmin:  guest.isAdmin,
+        isGuest:  true,
+      },
+    });
+  } catch (error) {
+    console.error("Guest login error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   registerController,
   loginController,
   getMeController,
   logoutController,
+  guestLoginController
 };

@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   logoutUser,
+  guestLogin,
   clearError,
 } from "../authSlice";
 
@@ -29,6 +30,14 @@ export function useAuth() {
     }
   }
 
+  // ── Guest Login ───────────────────────────
+  async function handleGuestLogin() {
+    const result = await dispatch(guestLogin());
+    if (guestLogin.fulfilled.match(result)) {
+      navigate("/");
+    }
+  }
+
   // ── Logout ────────────────────────────────
   async function handleLogout() {
     await dispatch(logoutUser());
@@ -47,7 +56,9 @@ export function useAuth() {
     handleLogin,
     handleRegister,
     handleLogout,
+    handleGuestLogin, // ✅ add kiya
     handleClearError,
     isAdmin: user?.isAdmin || false,
+    isGuest: user?.isGuest || false, // ✅ guest check ke liye
   };
 }

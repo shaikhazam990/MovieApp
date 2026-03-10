@@ -24,3 +24,6 @@ export async function getMeApi() {
   const res = await api.get("/api/auth/me");
   return res.data;
 }
+
+export const guestLoginApi = () =>
+  api.post("/api/auth/guest-login");

@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import "../style/auth.scss";
 
 export default function Login() {
-  const { handleLogin, loading, error, handleClearError } = useAuth();
+  const { handleLogin, handleGuestLogin, loading, error, handleClearError } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   useEffect(() => { handleClearError(); }, []);
@@ -70,6 +70,20 @@ export default function Login() {
             </button>
 
           </form>
+
+          {/* Divider */}
+          <div className="auth-divider">
+            <span>or</span>
+          </div>
+
+          {/* Guest Login Button */}
+          <button
+            className="auth-btn auth-btn--guest"
+            onClick={handleGuestLogin}
+            disabled={loading}
+          >
+            {loading ? <span className="auth-btn__loader" /> : "🎬 Continue as Guest"}
+          </button>
 
           <p className="auth-form-box__footer">
             Don't have an account? <Link to="/register">Create one</Link>
