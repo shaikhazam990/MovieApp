@@ -4,6 +4,7 @@ import {
   loginApi,
   logoutApi,
   getMeApi,
+  guestLoginApi,
 } from "./services/auth.api";
 
 export const registerUser = createAsyncThunk(
