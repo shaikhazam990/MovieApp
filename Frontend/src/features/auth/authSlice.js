@@ -12,8 +12,6 @@ export const registerUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await registerApi(data);
-      // axios response → res.data.user
-      // agar auth.api.js mein res.data return karta hai toh res.user
       return res.data?.user || res.user;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Register failed");
@@ -75,11 +73,22 @@ const authSlice = createSlice({
     user: null,
     loading: false,
     error: null,
-    initializing: true, // ← refresh fix ke liye
+    initializing: true,
   },
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    // ← NEW: college WiFi / backend blocked fallback
+    setDemoUser: (state) => {
+      state.user = {
+        _id: "demo",
+        username: "Guest",
+        email: "guest@demo.com",
+        isGuest: true,
+      };
+      state.initializing = false;
+      state.loading = false;
     },
   },
   extraReducers: (builder) => {
@@ -132,7 +141,7 @@ const authSlice = createSlice({
         state.user = null;
       })
 
-      // getMe — app load pe auth check
+      // getMe
       .addCase(getMe.pending, (state) => {
         state.initializing = true;
       })
@@ -147,5 +156,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+// ← setDemoUser export add kiya
+export const { clearError, setDemoUser } = authSlice.actions;
 export default authSlice.reducer;

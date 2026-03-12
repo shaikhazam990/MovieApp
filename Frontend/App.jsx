@@ -2,20 +2,22 @@ import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { router } from "./app.routes";
-import { getMe, guestLogin } from "./src/features/auth/authSlice";
+import { getMe, guestLogin, setDemoUser } from "./src/features/auth/authSlice";
 import "./src/shared/styles/global.scss";
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Pehle check karo logged in hai ya nahi
+    // 4 sec mein backend respond nahi kiya toh demo user
+    const fallbackTimer = setTimeout(() => {
+      dispatch(setDemoUser());
+    }, 4000);
+
     dispatch(getMe())
       .unwrap()
-      .catch(() => {
-        // getMe fail matlab koi session nahi — auto guest login
-        dispatch(guestLogin());
-      });
+      .catch(() => dispatch(guestLogin()).unwrap())
+      .finally(() => clearTimeout(fallbackTimer));
   }, [dispatch]);
 
   return <RouterProvider router={router} />;
