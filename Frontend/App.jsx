@@ -2,15 +2,20 @@ import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { router } from "./app.routes";
-import { getMe } from "./src/features/auth/authSlice";
+import { getMe, guestLogin } from "./src/features/auth/authSlice";
 import "./src/shared/styles/global.scss";
 
 function App() {
   const dispatch = useDispatch();
 
-  // App load hote hi check karo — user logged in hai ya nahi
   useEffect(() => {
-    dispatch(getMe());
+    // Pehle check karo logged in hai ya nahi
+    dispatch(getMe())
+      .unwrap()
+      .catch(() => {
+        // getMe fail matlab koi session nahi — auto guest login
+        dispatch(guestLogin());
+      });
   }, [dispatch]);
 
   return <RouterProvider router={router} />;
